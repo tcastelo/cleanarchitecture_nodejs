@@ -1,0 +1,52 @@
+version: "3.0"
+
+services:
+  ms_pedido:
+    container_name: ms_pedido 
+    build: ./ms_pedido
+    ports: 
+      - "3000:3000"
+    networks: 
+      - clean-architecture-network
+  
+  ms_produto:
+    container_name: ms_produto 
+    build: ./ms_produto
+    ports: 
+      - "3001:3001"
+    networks: 
+      - clean-architecture-network
+  
+  postgres:
+    container_name: postgres
+    image: postgres
+    logging:
+      driver: none
+    environment: 
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks: 
+      - clean-architecture-network
+  
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    logging:
+      driver: none
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "teste@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - clean-architecture-network
+
+networks: 
+  clean-architecture-network:
+    driver: bridge
+    
